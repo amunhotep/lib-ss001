@@ -536,7 +536,7 @@ const
     lkTrTemp.Free;
     for i:=0 to lkDBGQuant.Columns.Count-1 do
       begin
-      if(AnsiUpperCase(lkDBGQuant.Columns[i].FieldName) = 'TMC_LIST')then
+      if(AnsiUpperCase(lkDBGQuant.Columns[i].FieldName) = 'TMC_TMC_LIST_ID')then
         begin
         lkDBGQuant.Columns[i].KeyList.Text     := '0'+#13#10+'1';
         lkDBGQuant.Columns[i].PickList.Text    := 'T'+#13#10+'K';

@@ -24,7 +24,7 @@
     with TxcEditCombo(Sender) do
       begin
       SetGlobalVariable('COUNTRY_ID', IntToStr(Tag));
-      call('DB:CONFIG/REF/COUNTRIES/DEFAULT_DLG.PS');
+      call('PEAKTOP:IDE/ERP/CONFIG2/REF/COUNTRIES/DEFAULT_DLG.PS');
       lkStr := GetGlobalVariable('COUNTRY_ID');
       if( (UpperCase(lkStr) = 'NULL') or (StrTrimAll(lkStr)='') )then exit;
       Tag := StrToInt(lkStr);
@@ -63,7 +63,7 @@
       Text      := aValue;
       lkTop     := Top + Height + 4;
       end;
-    lkLbl := CreateTLabel(lkForm,lkForm,'—трана локализации (€зык локализации)',4,lkTop,20, 280,alNone,taLeftJustify);
+    lkLbl := CreateTLabel(lkForm,lkForm,'язык локализации',4,lkTop,20, 120,alNone,taLeftJustify);
     with lkLbl do
       begin
       Font.Name := 'Courier New';
@@ -71,7 +71,7 @@
       Font.Style:= [fsBold];
       lkTop     := Top + Height + 4;
       end;
-    lkLang := CreateTxcEditCombo(lkForm, lkForm, 'Lang', 288, lkLbl.Top, lkLbl.Height, lkForm.Width - 308);
+    lkLang := CreateTxcEditCombo(lkForm, lkForm, 'Lang', 128, lkLbl.Top, lkLbl.Height, lkForm.Width - 148);
     with lkLang do
       begin
       Anchors   := [akLeft, akTop, akRight];
@@ -82,7 +82,7 @@
       ReadOnly      := true;
       AlwaysEnable  := true;
       Tag           := StrToInt(aLang);
-      GetField(FBDataBase, 'TABL$R_COUNTRIES', 'NAME', 'ID = '+aLang, lkStr);
+      GetField(FBDataBase, 'TABL$R_COUNTRIES', 'COALESCE(LANG_NAME, NAME)', 'ID = '+aLang, lkStr);
       Text          := lkStr;
       OnButtonClick := @LocalizationIntf_edtLang_OnButtonClick;
       end;
@@ -126,7 +126,7 @@
       begin
       if not Active then exit;
       if not(RecordCount>0)then exit;
-      lkLang := '1000054';
+      lkLang := '1000071';
       lkStr  := '';
       if(FindField('NAME') <> nil)then
         lkStr:= FieldByName('NAME').AsString;
@@ -136,8 +136,8 @@
       if(Length(lkStr) > 254)then lkStr := Copy(lkStr, 1, 254);
       lkStr := StrReplaceStr(lkStr, #13#10, #$20);
       lkStr := StrReplaceStr(lkStr, '''', '''''');
-      ExecSQL(LocalizationIntf_qrlocal(TComponent(Sender).Owner).DataBase, 'INSERT INTO TABL$_LOCAL(OBJ_ID, REC_ID, COUNTRY_ID, NAME) VALUES ('''+
-        LocalizationIntf_qrlocal(TComponent(Sender).Owner).Settings[0]+''', '''+
+      ExecSQL(LocalizationIntf_qrlocal(TComponent(Sender).Owner).DataBase, 'INSERT INTO TABL$_LOCAL(OBJ_ID, COL_ID, REC_ID, COUNTRY_ID, NAME) VALUES ('''+
+        LocalizationIntf_qrlocal(TComponent(Sender).Owner).Settings[0]+''', ''NAME'', '''+
         LocalizationIntf_qrlocal(TComponent(Sender).Owner).DataSource.DataSet.FieldByName(ERP_DATASET_DBKEY).AsString+''', '''+
         lkLang+''', '''+lkStr+''')');
       LocalizationIntf_Refresh(TComponent(Sender).Owner);
@@ -245,7 +245,7 @@
       DataSource  := aMasterDataSource;
       AfterClose  := @LocalizationIntf_qrlocal_AfterClose;
       SQL.Text := 
-        'SELECT L.ID, L.NAME, L.FLAG_DELETE, L.OBJ_ID, L.REC_ID, L.COUNTRY_ID '+SQLCRLF+
+        'SELECT L.ID, L.NAME, L.FLAG_DELETE, L.OBJ_ID, L.COL_ID, L.REC_ID, L.COUNTRY_ID '+SQLCRLF+
         '      ,(SELECT FIRST 1 C.NAME      FROM TABL$R_COUNTRIES C WHERE (C.ID = L.COUNTRY_ID) )AS COUNTRY_NAME '+SQLCRLF+
         '      ,(SELECT FIRST 1 C.LANG_NAME FROM TABL$R_COUNTRIES C WHERE (C.ID = L.COUNTRY_ID) )AS LANG_NAME '+SQLCRLF+
         'FROM   TABL$_LOCAL L '+SQLCRLF+
@@ -286,6 +286,7 @@
     lkCol := CreateTColumnEh(lkDBG,'NAME'        ,''                   ,'название элемента'     ,420,taLeftJustify );
     lkCol := CreateTColumnEh(lkDBG,'COUNTRY_NAME',''                   ,'страна'                , 96,taLeftJustify );
     lkCol := CreateTColumnEh(lkDBG,'LANG_NAME'   ,''                   ,'€зык'                  ,120,taLeftJustify );
+    lkCol := CreateTColumnEh(lkDBG,'COL_ID'      ,''                   ,'столбец'               , 80,taLeftJustify );
     lkAct := CreateTAction(aOwner,obj_name_erp_actlocalins,msg_erp_actlocalins,msg_erp_actlocalins_hint,'',0,176); lkAct.OnExecute := @LocalizationIntf_actIns_OnExecute;   
     lkTBB := CreateTxcToolBarButton2(lkTopBar,lkTopBar,'tbb'+lkAct.Name,lkLBL.Left+lkLBL.Width,1,lkTopBar.Height-2,80,alLeft,lkAct);
     with lkTBB do

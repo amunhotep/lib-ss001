@@ -67,8 +67,10 @@
       begin
       SelectSQL.Text := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_SQL_DBATTACH)); 
       Prepare;
-      ParamByName('Q_USER_VAR'   ).AsString := ERP_GLOBALVARIABLE_USER_CURRENT;
-      ParamByName('Q_ERP_VERSION').AsString := ERP_GLOBALVARIABLE_AMUNHOTEP_VERSION;
+      ParamByName('Q_USER_VAR'      ).AsString := ERP_GLOBALVARIABLE_USER_CURRENT;
+      ParamByName('Q_USER_VARLOCAL' ).AsString := ERP_GLOBALVARIABLE_USER_LOCAL;
+      ParamByName('Q_USER_VARFILIAL').AsString := ERP_GLOBALVARIABLE_USER_FILIAL;
+      ParamByName('Q_ERP_VERSION'   ).AsString := ERP_GLOBALVARIABLE_AMUNHOTEP_VERSION;
       Open;
       end;
     if TERPForm_MemTableMain(aOwner).Active then  
@@ -242,6 +244,8 @@
     lkCol := CreateTColumnEh(lkdbg,'AMUNHOTEP_VERSION'     ,''                   ,'AMUNHOTEP|Версия ядра'             ,104,taLeftJustify );
     lkCol := CreateTColumnEh(lkdbg,'DATABASE_USER'         ,''                   ,'AMUNHOTEP|USER'                    , 80,taLeftJustify );
     lkCol := CreateTColumnEh(lkdbg,'WRK_NAME'              ,''                   ,'AMUNHOTEP|Сотрудник'               ,120,taLeftJustify );
+    lkCol := CreateTColumnEh(lkdbg,'COUNTRY_NAME'          ,''                   ,'AMUNHOTEP|Локализация'             , 80,taLeftJustify );
+    lkCol := CreateTColumnEh(lkdbg,'FILIAL_NAME'           ,''                   ,'AMUNHOTEP|Филиал'                  , 96,taLeftJustify );
     TERPForm_GridSettingsLoad(lkdbg, lkSettings.Values[ERP_SETTINGS_TEMPFILENAME]);
     lkQrTrans := TxFBQuery.Create(lkDBG.DataSource.DataSet);
     with lkQrTrans do

@@ -266,7 +266,7 @@
       begin
       SearchPanel.FilterOnTyping := True;
       SearchPanel.ShortCut := TextToShortCut('Ctrl+F');
-      SearchPanel.Enabled := not SearchPanel.Enabled;
+      SearchPanel.Enabled  := not SearchPanel.Enabled;
       end;
     {$ELSE}
     ExecuteDBGridEhFindDialog(TDBGridEh(TComponent(Sender).Owner), '', '', [], true);

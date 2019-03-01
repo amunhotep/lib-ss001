@@ -11,6 +11,5 @@ const  //=================== PEAKTOP:IDE/MAINMENU_LANG.INC =====================
   msg_actwndclose      = 'Закрыть активное'   ;msg_actwndclose_hint      = 'Закрыть активное окно';
   msg_actwndcloseall   = 'Закрыть все'        ;msg_actwndcloseall_hint   = 'Закрыть все окна программы';
   msg_actwndtaskbar    = 'Панель окон'        ;msg_actwndtaskbar_hint    = 'Показать или спрятать панель окон';
-  msg_acthelpcommitlib = 'Закоммитить SVN'    ;msg_acthelpcommitlib_hint = 'Закоммитить в SVN стандартную библиотеку кода';
   msg_acthelpupdatelib = 'Обновить библиотеку';msg_acthelpupdatelib_hint = 'Обновить стандартную библиотеку кода';
   msg_acthelpabout     = 'О программе'        ;msg_acthelpabout_hint     = 'О программе';      

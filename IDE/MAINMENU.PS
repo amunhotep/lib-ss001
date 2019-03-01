@@ -28,8 +28,6 @@
     lkMI  := CreateTMenuItemLine(lkMIWnd, 'miWndN004');
     lkAct := CreateComplexAction(Amunhotep.MainForm,obj_name_actwndtaskbar   ,msg_actwndtaskbar   ,msg_actwndtaskbar_hint   ,''             ,0,174,@actWndTaskBar_OnExecute   ,@actWndTaskBar_OnUpdate,lkMIWnd );
     lkMI  := CreateTMenuItemLine(lkMIHelp,'miHelpN001');
-    if FileExists(StrAbsolutePath('../conf/amunhotep-peaktop.conf', Amunhotep.ExeName))then
-    lkAct := CreateComplexAction(Amunhotep.MainForm,obj_name_acthelpcommitlib,msg_acthelpcommitlib,msg_acthelpcommitlib_hint,''             ,0,143,@actHelpCommitLib_OnExecute,nil                    ,lkMIHelp);
     lkAct := CreateComplexAction(Amunhotep.MainForm,obj_name_acthelpupdatelib,msg_acthelpupdatelib,msg_acthelpupdatelib_hint,''             ,0,562,@actHelpUpdateLib_OnExecute,nil                    ,lkMIHelp);
     lkMI  := CreateTMenuItemLine(lkMIHelp,'miHelpN255');
     lkAct := CreateComplexAction(Amunhotep.MainForm,obj_name_acthelpabout    ,msg_acthelpabout    ,msg_acthelpabout_hint    ,'Alt+BkSp'     ,0,263,@actHelpAbout_OnExecute    ,nil                    ,lkMIHelp);

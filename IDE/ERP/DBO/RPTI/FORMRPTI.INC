@@ -540,7 +540,6 @@
     lkTBDataNav.Width := TWinControl_AutoWidth2(lkTBDataNav)+2;  
     lkTBDataExp := CreateTxcGradientPanelVistaToolBar(Result,lkTBData,obj_name_erp_toolbar_export,'',alLeft,2400,1,TERPForm_DefaultToolButtonWidth,TERPForm_DefaultToolButtonWidth,TERPForm_DefaultToolBarBorderStyle);
     lkTBDataExp.Width := TWinControl_AutoWidth2(lkTBDataExp)+2;  
-
     RegisterSynEdit(Interface_SynEdit_Create(Result, lkPC.Pages[3], 'SynEdit'), ftSQL);
     if(GetGlobalVariable(ERP_GLOBALVARIABLE_USER_CURRENT) <> 'PEAKTOP')then
       lkPC.Pages[3].PageControl := nil;
@@ -553,10 +552,7 @@
       lkQrLoad.Prepare;
       lkQrLoad.ParamByName('PQ_TB_ID'   ).AsString := aReportGUID;
       lkQrLoad.ParamByName('PQ_USER_VAR').AsString := ERP_GLOBALVARIABLE_USER_CURRENT;
-      try
-        lkQrLoad.Open;
-      except
-      end;
+      lkQrLoad.Open;
       if not(lkQrLoad.Active)then
         begin
         if lkTrLoad.InTransaction then

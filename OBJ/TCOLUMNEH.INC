@@ -99,4 +99,4 @@
       AutoDropDown         := aColumnEhSrc.AutoDropDown; 
       ColParams.Text       := aColumnEhSrc.ColParams.Text;
       end;
-  end;    
+  end;   

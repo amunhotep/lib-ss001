@@ -63,12 +63,7 @@
   //============================================================================
   procedure actHelpUpdateLib_OnExecute(Sender :TObject);
   begin
-    call('PEAKTOP:IDE/$COMMON/LIBRARYUPDATES.PS');
-  end;    
-  //============================================================================
-  procedure actHelpCommitLib_OnExecute(Sender :TObject);
-  begin
-    call('PEAKTOP:IDE/$COMMON/LIBRARYUPDATES_COMMIT.PS');
+    call('PEAKTOP:IDE/$COMMON/STDLIB_GIT.PS');
   end;    
   //============================================================================
   procedure actHelpAbout_OnExecute(Sender :TObject);

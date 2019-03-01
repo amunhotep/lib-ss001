@@ -9,6 +9,7 @@ const  //============= PEAKTOP:IDE/ERP/DBO/MENU/OBJECTEDITOR_LANG.INC ==========
   msg_erp_objeditormenu_imageindex       = 'Картинка';
   msg_erp_objeditormenu_groupindex       = 'Индекс';
   msg_erp_objeditormenu_menuaccss        = 'Доступ к пункту меню';
+  msg_erp_objeditormenu_menulocal        = 'Локализация';
   msg_erp_objeditormenu_access           = 'Доступ';
   msg_erp_objeditormenu_enter_name       = 'Введите заголовок меню';
   msg_erp_objeditormenu_image_case       = 'Выбрать номер картинки';

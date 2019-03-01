@@ -150,6 +150,9 @@ begin
   Keys.Add('.dcu'   );                                        Values.Add('AMUNHOTEP.DcuFile');
   Keys.Add('AMUNHOTEP.DcuFile');                                    Values.Add('Delphi Compiled Unit');
   Keys.Add('AMUNHOTEP.DcuFile\DefaultIcon');                        Values.Add(GetIconPath('dcu'));
+  Keys.Add('.o'   );                                         Values.Add('AMUNHOTEP.ObjFile');
+  Keys.Add('AMUNHOTEP.ObjFile');                                    Values.Add('Delphi Compiled Unit');
+  Keys.Add('AMUNHOTEP.ObjFile\DefaultIcon');                        Values.Add(GetIconPath('o'));
 
   Keys.Add('.conf'   );                                       Values.Add('configfile');
   Keys.Add('.cfg'   );                                        Values.Add('configfile');
@@ -225,10 +228,6 @@ begin
   Keys.Add('phpfile\DefaultIcon');                            Values.Add(GetIconPath('php'));
   Keys.Add('phpfile\Shell\AMUNHOTEP');                        Values.Add(GetAmunhotepCaption+' - Editor');
   Keys.Add('phpfile\Shell\AMUNHOTEP\Command');                Values.Add(GetAmunhotepStartParamsEditor);
-  Keys.Add('phpfile\Shell\AMUNHOTEPPHPIDE');                  Values.Add('AMUNHOTEP PHP IDE');
-  Keys.Add('phpfile\Shell\AMUNHOTEPPHPIDE\Command');          Values.Add(StrReplaceChar(StrAbsolutePath('./amunhotep.exe -idephp "%1"', Amunhotep.ExeName), '/', '\'));
-  Keys.Add('phpfile\Shell\Run');                              Values.Add('Run this script');
-  Keys.Add('phpfile\Shell\Run\Command');                      Values.Add(StrReplaceChar('d:/appl/php/php.exe -c d:/appl/php/php.ini -f "%1" >"%1.html"', '/', '\'));
 
   Keys.Add('.py');                                            Values.Add('Python.Source');
   Keys.Add('Python.Source');                                  Values.Add('Python Source File');

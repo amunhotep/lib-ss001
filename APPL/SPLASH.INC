@@ -25,14 +25,14 @@ const //==================== PEAKTOP:APPL/SPLASH.INC ===========================
       begin                    
       AlphaBlendValue := 232;
       AlphaBlend      := true;
-      Name        := amunhotep_splash_name;
-      ControlStyle:= ControlStyle + [csOpaque]; 
-      Color       := $00FF8000;
-      Position    := poScreenCenter;
-      Height      := 361;
-      Width       := 482;
-      BorderStyle := bsNone;
-      Visible     := false;
+      Name            := amunhotep_splash_name;
+      ControlStyle    := ControlStyle + [csOpaque]; 
+      Color           := $00FF8000;
+      Position        := poScreenCenter;
+      Height          := 361;
+      Width           := 482;
+      BorderStyle     := bsNone;
+      Visible         := false;
       end;
     lkImg     := CreateTImage(Result,Result,amunhotep_splash_image_name,alClient,0,0,360,480);
     lkGauge := TxcGauge.Create(Result);
@@ -56,7 +56,7 @@ const //==================== PEAKTOP:APPL/SPLASH.INC ===========================
     with lkLbl do
       begin
       Name       := amunhotep_splash_label_big;
-      Font.Name  := 'Tahoma';
+      Font.Name  := 'Tahoma';//'Cellblock NBP';
       Font.Size  := 10;
       Font.Color := clWhite;
       Font.Style := [fsBold];
@@ -65,10 +65,10 @@ const //==================== PEAKTOP:APPL/SPLASH.INC ===========================
     with lkLbl do
       begin
       Name       := amunhotep_splash_label_small;
-      Font.Name  := 'Courier New';
-      Font.Size  := 8;
+      Font.Name  := 'Fixedsys';
+      Font.Size  := 12;
       Font.Color := $BFB0B0;
-      Font.Style := [fsBold];
+      Font.Style := [];
       end;
     with lkImg do
       begin
@@ -87,8 +87,9 @@ const //==================== PEAKTOP:APPL/SPLASH.INC ===========================
       with Picture.Bitmap.Canvas do
         begin
         Brush.Style:= bsClear;
-        Font.Name  := 'Tahoma';
-        Font.Size  := 7;
+        Font.Name  := 'Tahoma';//'Cellblock NBP';
+        Font.Size  := 10;
+        Font.Style := [fsBold];
         if(Pixels[0,0] = clBlack)then
           begin
           Font.Color := clWhite;
@@ -101,15 +102,14 @@ const //==================== PEAKTOP:APPL/SPLASH.INC ===========================
           TLabel(Result.FindComponent(amunhotep_splash_label_big)  ).Font.Color := clBlack;
           TLabel(Result.FindComponent(amunhotep_splash_label_small)).Font.Color := clBlack + $2F2020;
           end;
-        Font.Style := [fsBold];
         Brush.Style:= bsClear;
         lkCaption  := #$20#$A9+'PEAKTOP, 2002-'+FormatDateTime('yyyy', Now);
-        TextOut(Trunc(amunhotep_splash_indent/2), Height - TextHeight('Wg') - Trunc(amunhotep_splash_indent/2) - 2, lkCaption);
+        TextOut(Trunc(amunhotep_splash_indent), Height - TextHeight('Wg') - Trunc(amunhotep_splash_indent), lkCaption);
         lkCaption  := 'version: ' + IntToStr(Trunc(Amunhotep.Version / 1000))+'.'+// major
           FormatFloat('0'   ,Trunc(Frac(Amunhotep.Version / 1000) *  10) )+'.'+ // minor
           FormatFloat('00'  ,     (Frac(Amunhotep.Version /  100) * 100) )+'.'+ // patch
           FormatFloat('0000',Amunhotep.Version)+' ';  
-        TextOut(Width - TextWidth(lkCaption) - Trunc(amunhotep_splash_indent/2), Height - TextHeight('Wg') - Trunc(amunhotep_splash_indent/2) - 2, lkCaption);
+        TextOut(Width - TextWidth(lkCaption) - Trunc(amunhotep_splash_indent), Height - TextHeight('Wg') - Trunc(amunhotep_splash_indent) - 2, lkCaption);
         lkGauge.Top := Height - TextHeight('Wg') - amunhotep_splash_indent - lkGauge.Height;
         end;  
       end;

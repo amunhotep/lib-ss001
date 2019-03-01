@@ -5,32 +5,30 @@
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/DBGRID/GETCELLPARAMS_REF.INC}    {$I ../DBGRID/GETCELLPARAMS_REF.INC}         {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/REF/FORMREF_LOADCOLUMNS.INC}     {$I ./FORMREF_LOADCOLUMNS.INC}               {$ENDIF}
   //============= PEAKTOP:IDE/ERP/DBO/REF/FORMREF$LOADCHILDS.INC ===============
-  procedure TERPFormItem_DataSetChild_OnNewRecord(DataSet :TDataSet);
-  var
-    i      :Integer;
-    lkStr  :string;
-    lkOwner:TComponent;
-    lkDBG  :TDBGridEh;
+  procedure TERPFormItem_DataSetChild_AfterOpen(DataSet :TDataSet);  
   begin
-    with TxFBDataSet(DataSet) do
-      begin
-      for i:=0 to Fields.Count-1 do
-        begin
-        if( (Fields[i].FieldName = ERP_DATASET_DBKEY) or (Fields[i].FieldName = 'ID') )then
-          try Fields[i].AsString := '-1'; except end;
-        if(Fields[i].FieldName = GeneratorField.Field)then
-          if GetField(FBDataBase, 'RDB$DATABASE', 'GEN_ID('+GeneratorField.Generator+', 0)', '', lkStr)then
-            try Fields[i].AsString := IntToStr(StrToInt(lkStr) + GeneratorField.IncrementBy); except end;
-        end;
+    TERPForm_OpenDataSetsChilds(DataSet);
+  end;
+  //============================================================================
+  procedure TERPFormItem_DataSetChild_BeforeClose(DataSet :TDataSet);
+  begin
+    TERPForm_CloseDataSetsChilds(DataSet);
+  end;
+  //============================================================================
+  procedure TERPFormItem_DataSetChild_OnNewRecord(_DataSet :TDataSet);
+  var
+    lkOwner  :TComponent;
+    lkDBG    :TDBGridEh;
+  begin
+    with TxFBDataSet(_DataSet.Owner) do
       if( (SQLFilter.Text <> '') and (DataSource <> nil) )then
-        FieldByName(SQLFilter.Names[0]).AsString := DataSource.DataSet.FieldByName(SQLFilter.Values[SQLFilter.Names[0]]).AsString;
-      end;
+        _DataSet.FieldByName(SQLFilter.Names[0]).AsString := DataSource.DataSet.FieldByName(SQLFilter.Values[SQLFilter.Names[0]]).AsString;
     lkDBG := nil;
-    lkOwner := TERPForm_GetOwner(DataSet);
+    lkOwner := TERPForm_GetOwner(_DataSet.Owner);
     if(lkOwner <> nil)then
-      lkDBG := TDBGridEh(lkOwner.FindComponent(obj_name_erp_data_dbgdata+DataSet.Name));
+      lkDBG := TDBGridEh(lkOwner.FindComponent(obj_name_erp_data_dbgdata+_DataSet.Owner.Name));
     if(lkDBG = nil)then exit;  
-    TERPForm_DBGrid_FillValuesGrid(DataSet, nil, lkDBG);
+    TERPForm_DBGrid_FillValuesGrid(_DataSet, TxFBDataSet(_DataSet.Owner), lkDBG);
   end;
   //============================================================================
   procedure TERPFormItem_LoadChilds(aQr:TxFBQuery; aOwner :TComponent; aParentDataSource:TDataSource; const aProcessBlob:Boolean);
@@ -44,8 +42,10 @@
     lkQr      :TxFBQuery;
     lkToolBar :TxcGradientPanelVista;
     lkDTS          :TxFBDataSet;
-    lkDS           :TDataSource;
+    lkDS, lkDSMT   :TDataSource;
     lkDBG          :TDBGridEh;
+    lkDSDrv        :TDataSetDriverEh;
+    lkMT           :TMemTableEh;
     lkObjName      :string;
     lkSQLSelect    :string;
     lkSQLRefresh   :string; 
@@ -87,7 +87,8 @@
           end;
         SQLFilter.Clear;
         SQLFilter.Add(aQr.FieldByName('INDEX_FIELDS').AsString+'='+aQr.FieldByName('KEY_FIELDS').AsString);
-        OnNewRecord := @TERPFormItem_DataSetChild_OnNewRecord;
+        AfterOpen   := @TERPFormItem_DataSetChild_AfterOpen;
+        BeforeClose := @TERPFormItem_DataSetChild_BeforeClose;
         end;
       lkDS := TDataSource.Create(lkDTS);
       with lkDS do
@@ -95,7 +96,33 @@
         Name := 'DataSource'+lkDTS.Name;
         DataSet := lkDTS;
         end;
-      lkDBG := CreateTDBGridEh(aOwner,lkTS,lkDS,obj_name_erp_data_dbgdata+lkDTS.Name, 0,100,200,200,alClient);
+      lkDSDrv:= TDataSetDriverEh.Create(lkDTS);
+      with lkDSDrv do
+        begin
+        Name             := 'DataSetDriver'+lkDTS.Name;
+        ProviderDataSet  := lkDTS;
+        ResolveToDataSet := true; 
+        end;
+      lkMT := TMemTableEh.Create(lkDTS);
+      with lkMT do
+        begin
+        Name             := 'MemTable'+lkDTS.Name;
+        DataDriver       := lkDSDrv;
+        CachedUpdates    := false;
+        Filtered         := true;
+        FetchAllOnOpen   := true;
+        MasterDetailSide := mdsOnSelfEh;
+//          StoreDefs         := true;
+        Options          := [mtoTextFieldsCaseInsensitive];
+        OnNewRecord      := @TERPFormItem_DataSetChild_OnNewRecord;
+        end;
+      lkDSMT := TDataSource.Create(lkMT);
+      with lkDSMT do
+        begin
+        Name    := 'DataSource'+lkMT.Name;
+        DataSet :=  lkMT;
+        end; 
+      lkDBG := CreateTDBGridEh(aOwner,lkTS,lkDSMT,obj_name_erp_data_dbgdata+lkDTS.Name, 0,100,200,200,alClient);
       with lkDBG do
         begin
         HelpKeyWord := '0';
@@ -113,6 +140,13 @@
         AllowedOperations := [];
         SortLocal    := true;
         VTitleMargin := 4;
+        with STFilter do
+          begin
+          InstantApply := true;
+          Local        := true;
+          Location     := stflUnderTitleFilterEh;
+          Visible      := true;
+          end;
         OnGetCellParams := @ERP_DBGridEh_OnGetCellParams_Ref;
         Columns.Clear;
         end; 

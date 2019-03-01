@@ -11,6 +11,5 @@ const //=================== PEAKTOP:IDE/MAINMENU_OBJNAMES.INC ==================
   obj_name_actwndclose     = 'actWindowCloseActive';
   obj_name_actwndcloseall  = 'actWindowCloseAll';
   obj_name_actwndtaskbar   = 'actWindowTaskBar';
-  obj_name_acthelpcommitlib= 'actHelpCommitLibrary';
   obj_name_acthelpupdatelib= 'actHelpUpdateLibrary';
   obj_name_acthelpabout    = 'actHelpAbout';      

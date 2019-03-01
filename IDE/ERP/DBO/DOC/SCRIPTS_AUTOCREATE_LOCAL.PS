@@ -71,7 +71,6 @@ begin
         StringsLoadFromFile(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG/DOC/4/RPT_DEFAULT0000.XFM')) 
       );
       end;
-
     if not FileExists(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG/DOC/'+lkQuery.FieldByName('ID').AsString+'/RPT_DEFAULT0001.XFM'))then
       begin
       WriteLn('PEAKTOP:IDE/ERP/CONFIG/DOC/'+lkQuery.FieldByName('ID').AsString+'/RPT_DEFAULT0001.XFM');

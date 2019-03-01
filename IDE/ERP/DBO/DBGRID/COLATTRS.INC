@@ -595,6 +595,7 @@
     if(Result <> nil)then
       with Result do
         begin
+        AutoSize   := false;
         Ctl3D      := false;
         Flat       := true; 
         Parent     := aParent;
@@ -603,6 +604,7 @@
         Height     := TERPForm_DefaultControlHeight - TERPForm_DefaultControlIndent;
         Width      := aWidth; 
         Color      := aQrLoad.FieldByName('COLOR').AsInteger;
+        Font.Style := [fsBold];
         Hint       := aQrLoad.FieldByName('HINT').AsString;
         ShowHint   := true;
         DataSource := aDataSource;

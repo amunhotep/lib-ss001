@@ -40,11 +40,13 @@ const //============ PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_NAMES.INC =============
   obj_name_erp_pagecontroldata   = 'PCData';
   obj_name_erp_pagecontrolregs   = 'PCRegisters';
   obj_name_erp_tabsheetdata      = 'tsData';
+  obj_name_erp_tabsheetcomments  = 'tsComments';
   obj_name_erp_tabsheetexternal  = 'tsExternal';
   obj_name_erp_tabsheetextension = 'tsExtension';
   obj_name_erp_scrollboxmain     = 'ScrollBoxMain';
   obj_name_erp_splitterdetail    = 'spltDetail';
   obj_name_erp_splitterleft      = 'spltLeft';
+  obj_name_erp_actlst            = 'ActionListMain';
   obj_name_erp_mimainmenu        = 'miMainMenu';
   obj_name_erp_mimainfile        = 'miMainFile';
   obj_name_erp_mimainfilenew     = 'miMainFileNew';
@@ -101,6 +103,8 @@ const //============ PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_NAMES.INC =============
   obj_name_erp_actnavup          = 'actNavUp';
   obj_name_erp_actprintgrid      = 'actPrintGrid';
   obj_name_erp_actprintitem      = 'actPrintItem';
+  obj_name_erp_actprintdefault   = 'actPrintDefault';
+  obj_name_erp_actexport         = 'actExport';
   obj_name_erp_actexportoocalc   = 'actExportOpenOfficeCalc';
   obj_name_erp_actexportoowrite  = 'actExportOpenOfficeWrite';
   obj_name_erp_actexportlocalc   = 'actExportLibreOfficeCalc';
@@ -140,6 +144,10 @@ const //============ PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_NAMES.INC =============
   obj_name_erp_actdocgotoday     = 'actDocGotoDay';
   obj_name_erp_actdocchildlist   = 'actDocChildList'; 
   obj_name_erp_actdoccnd         = 'actDocConducts';
+  obj_name_erp_actdocins         = 'actDocInsert';
+  obj_name_erp_actdoccreate      = 'actDocCreate';
+  obj_name_erp_actdocinschild    = 'actDocInsertChild';
+  obj_name_erp_actdocadd         = 'actDocAdd';
   obj_name_erp_actobjimg         = 'actObjectImages';
   obj_name_erp_data_evmain       = 'evMain';
   obj_name_erp_data_dtsmain      = 'dtsMain';obj_name_erp_data_mtmain    = 'mtMain'    ;
@@ -147,8 +155,9 @@ const //============ PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_NAMES.INC =============
                                              obj_name_erp_data_dtstemp   = 'dtsTemp'   ; obj_name_erp_data_qrtempchild = 'qrTempChild';
   obj_name_erp_data_trmain    = 'trMain'   ; obj_name_erp_data_qrmain    = 'qrMain'    ; obj_name_erp_data_dbgmain     = 'dbgMain';
   obj_name_erp_data_dtschilds = 'dtsChilds'; obj_name_erp_data_qrchilds  = 'qrChilds'  ; obj_name_erp_data_dbgchilds   = 'dbgChilds';
-                                             obj_name_erp_data_qrparents = 'qrParents' ; obj_name_erp_data_dbgparents  = 'dbgParents';
-  obj_name_erp_data_dtsdata   = 'dtsData'  ; obj_name_erp_data_qrdata    = 'qrData'    ; obj_name_erp_data_dbgdata     = 'dbgData';  
+  obj_name_erp_data_trdata    = 'trData'   ; obj_name_erp_data_qrparents = 'qrParents' ; obj_name_erp_data_dbgparents  = 'dbgParents';
+  obj_name_erp_data_dtsdata   = 'dtsData'  ; obj_name_erp_data_qrdata    = 'qrData'    ; obj_name_erp_data_dbgdata     = 'dbgData'; 
+  obj_name_erp_data_mtdata    = 'mtData'   ; 
   obj_name_erp_data_trcoments = 'trComents'; obj_name_erp_data_qrcoments = 'qrComents' ; obj_name_erp_data_dbgcoments  = 'dbgComents';
   obj_name_erp_data_trlocal   = 'trLocal'  ; obj_name_erp_data_qrlocal   = 'qrLocal'   ; obj_name_erp_data_dbglocal    = 'dbgLocal';
                                              obj_name_erp_data_qrexternal= 'qrExternal'; obj_name_erp_data_dbgexternal = 'dbgExternal';

@@ -65,6 +65,8 @@ const //============= PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_LANG.INC =============
   msg_erp_actnavup          = 'Вверх'              ;msg_erp_actnavup_hint         = 'Вверх';
   msg_erp_actprintgrid      = 'Печать'             ;msg_erp_actprintgrid_hint     = 'Предварительный просмотр печати';
   msg_erp_actprintitem      = 'Печать элемента'    ;msg_erp_actprintitem_hint     = 'Предварительный просмотр печати элемента';
+  msg_erp_actprintdefault   = 'Быстрая печать'     ;msg_erp_actprintdefault_hint  = 'Печать с шаблоном по-умолчанию';
+  msg_erp_actexport         = 'Экспорт'            ;msg_erp_actexport_hint        = 'Экспорт объекта во внешнюю программу';
   msg_erp_actexportlocalc   = 'Libre Office Calc'  ;msg_erp_actexportlocalc_hint  = 'Экспорт сетки в Libre Office Calc';
   msg_erp_actexportlowrite  = 'Libre Office Write' ;msg_erp_actexportlowrite_hint = 'Экспорт сетки в Libre Office Write';
   msg_erp_actexportoocalc   = 'OpenOffice Calc'    ;msg_erp_actexportoocalc_hint  = 'Экспорт сетки в OpenOffice Calc';
@@ -98,6 +100,10 @@ const //============= PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_LANG.INC =============
   msg_erp_actdocgotojrnl    = 'Перейти'            ;msg_erp_actdocgotojrnl_hint   = 'Перейти в журнал документа'; 
   msg_erp_actdocgotoday     = 'Перейти на дату'    ;msg_erp_actdocgotoday_hint    = 'Перейти в операционный день по номеру документа'; 
   msg_erp_actdoccnd         = 'Проводки'           ;msg_erp_actdoccnd_hint        = 'Открыть проводки по документу'; 
+  msg_erp_actdocins         = 'Новый Фирма'        ;msg_erp_actdocins_hint        = 'Новый документ с выбором фирмы учёта'; 
+  msg_erp_actdoccreate      = 'Создать'            ;msg_erp_actdoccreate_hint     = 'Создать документ по текущей фирме учёта'; 
+  msg_erp_actdocinschild    = 'Ввод на основании'  ;msg_erp_actdocinschild_hint   = 'Создать новый документ на основании текущего'; 
+  msg_erp_actdocadd         = 'Добавить'           ;msg_erp_actdocadd_hint        = 'Создать подчинённый документ по текущей фирме учёта'; 
   msg_erp_actobjimg         = 'Изображения'        ;msg_erp_actobjimg_hint        = 'Изображения текущего элемента'; 
   msg_erp_actdocchildlist   = 'История'            ;msg_erp_actdocchildlist_hint  = 'Показать всю историю по документу'; 
   msg_erp_actcomentins      = 'Добавить'           ;msg_erp_actcomentins_hint     = 'Добавить комментарий к документу'; 

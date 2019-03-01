@@ -23,6 +23,7 @@
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP.INC}         {$I ../$COMMON/FORMERP.INC}                {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_LANG.INC}    {$I ../$COMMON/FORMERP_LANG.INC}           {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/OPER/IMAGELISTDLG.INC}       {$I ../OPER/IMAGELISTDLG.INC}              {$ENDIF}
+{$IFNDEF PEAKTOP:IDE/ERP/DBO/OPER/LOCAL/INTERFACE.INC}    {$I ../OPER/LOCAL/INTERFACE.INC}           {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/MENU/OBJECTEDITOR_LANG.INC}  {$I ./OBJECTEDITOR_LANG.INC}               {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/MENU/OBJECTEDITOR_NAMES.INC} {$I ./OBJECTEDITOR_NAMES.INC}              {$ENDIF}
   //=================== PEAKTOP:IDE/ERP/DBO/MENU/OBJEDITOR.INC =================
@@ -50,9 +51,9 @@
     TERPFormEdtrMenu_CloseDataSets(aOwner);
     with TERPForm_DataSetMain(aOwner) do
       begin
-      SelectSQL.Text := 'SELECT FIRST 1 M.MENUS_ID, M.ID, M.NAME, M.PARENT_ID, M.FLAG_DELETE, M.SHORTCUT, M.SCRIPT_NAME, M.IMAGE_INDEX,M.GROUP_INDEX '+SQLCRLF+
+      SelectSQL.Text := 'SELECT FIRST 1 M.ID AS '+ERP_DATASET_DBKEY+', M.MENUS_ID, M.ID, M.NAME, M.PARENT_ID, M.FLAG_DELETE, M.SHORTCUT, M.SCRIPT_NAME, M.IMAGE_INDEX,M.GROUP_INDEX '+SQLCRLF+
                         'FROM   TABL$_MENU M WHERE  (M.ID = '''+TxFBTreeView(aOwner.FindComponent(obj_name_erp_fbtreeview)).GetId+''')';
-      RefreshSQL.Text:= 'SELECT FIRST 1 M.MENUS_ID, M.ID, M.NAME, M.PARENT_ID, M.FLAG_DELETE, M.SHORTCUT, M.SCRIPT_NAME, M.IMAGE_INDEX,M.GROUP_INDEX '+SQLCRLF+
+      RefreshSQL.Text:= 'SELECT FIRST 1 M.ID AS '+ERP_DATASET_DBKEY+', M.MENUS_ID, M.ID, M.NAME, M.PARENT_ID, M.FLAG_DELETE, M.SHORTCUT, M.SCRIPT_NAME, M.IMAGE_INDEX,M.GROUP_INDEX '+SQLCRLF+
                         'FROM   TABL$_MENU M WHERE  (M.ID = ?ID)';
       ModifySQL.Text := 'UPDATE TABL$_MENU M SET '+SQLCRLF+
                         '   M.NAME        = ?NAME '+SQLCRLF+
@@ -65,35 +66,6 @@
                         'WHERE (M.ID = ?ID);';
       try Open; except end;                  
       end;
-  end;
-  //============================================================================
-  procedure TERPFormEdtrMenu_dtsMain_AfterOpen(DataSet :TDataSet);
-  var
-    i:Integer;
-  begin
-    for i:=0 to DataSet.ComponentCount-1 do
-      if ObjectInheritsFrom(DataSet.Components[i],'TDataSet') then
-        with TDataSet(DataSet.Components[i]) do
-          if not Active then try Open; except; end;
-  end;
-  //============================================================================
-  procedure TERPFormEdtrMenu_dtsMain_BeforeClose(DataSet :TDataSet);
-  var
-    i:Integer;
-  begin
-    for i:=0 to DataSet.ComponentCount-1 do
-      if ObjectInheritsFrom(DataSet.Components[i],'TDataSet') then
-        with TDataSet(DataSet.Components[i]) do
-          if Active then
-            begin
-            if(State <> dsBrowse)then
-              try
-                Post;
-              except
-                Cancel;
-              end;
-            Close;  
-            end;
   end;
   //============================================================================
   procedure TERPFormEdtrMenu_FBTreeView_OnClick(Sender :TObject);
@@ -370,8 +342,8 @@
     CreateTxFBTransDataSet(Result, obj_name_erp_data_trmain, obj_name_erp_data_dtsmain, 'DataSource'+obj_name_erp_data_dtsmain, ['isc_tpb_read_committed', 'isc_tpb_write', 'isc_tpb_rec_version', 'isc_tpb_nowait'], lkTr, lkDTS, lkDS);
     with lkDTS do
       begin
-      AfterOpen   := @TERPFormEdtrMenu_dtsMain_AfterOpen;
-      BeforeClose := @TERPFormEdtrMenu_dtsMain_BeforeClose;
+      AfterOpen   := @TERPForm_OpenDataSetsChilds;
+      BeforeClose := @TERPForm_CloseDataSetsChilds;
       end;  
     lkPanelClient := CreateTxcGradientPanel(Result,Result,obj_name_erp_panelclient,'',alClient,1,1,600,800,xbsNone,gdRightToLeft); 
     lkToolBar     := CreateTxcGradientPanelVistaToolBar(lkPanelClient,lkPanelClient,obj_name_erp_toolbar,'',alTop, 0,0,24,200,xbsRaized);
@@ -490,8 +462,8 @@
       RefreshSQL.Text := StringsLoadFromFile('PEAKTOP:IDE/ERP/DBO/SQL/OBJECTEDITOR/MENU_ACCS_REF.SQL'); 
       ModifySQL.Text  := StringsLoadFromFile('PEAKTOP:IDE/ERP/DBO/SQL/OBJECTEDITOR/MENU_ACCS_UPD.SQL'); 
       Tag             := 0;
-      AfterOpen       := @TERPFormEdtrMenu_dtsMain_AfterOpen;
-      BeforeClose     := @TERPFormEdtrMenu_dtsMain_BeforeClose;
+      AfterOpen       := @TERPForm_OpenDataSetsChilds;
+      BeforeClose     := @TERPForm_CloseDataSetsChilds;
       end; 
     lkDBG := CreateTDBGridEh(Result,lkTS,nil,obj_name_erp_data_dbgdata+obj_name_erp_objedtrmenu_access,1,lkToolBarAccss.Top+lkToolBarAccss.Height,200,200,alClient);
     with lkDBG do
@@ -529,7 +501,7 @@
       CheckBoxes    := true;
       end;
     lkDBG.FrozenCols := 3;  
-    TxcPageControlEx_ActivateDefaultPage(lkPC);
+
     lkAct := TERPForm_CreateAction(Result,obj_name_erp_acttreeinsroot,msg_erp_acttreeinsroot,msg_erp_acttreeinsroot_hint,'',0,443,@TERPFormEdtrMenu_actTreeInsRoot_OnExecute,nil,lkToolBarLeft,lkMIMain);
     lkAct := TERPForm_CreateAction(Result,obj_name_erp_acttreeins    ,msg_erp_actins        ,msg_erp_actins_hint        ,'',0,440,@TERPFormEdtrMenu_actTreeIns_OnExecute    ,nil,lkToolBarLeft,lkMIMain);
     lkAct := TERPForm_CreateAction(Result,obj_name_erp_acttreedel    ,msg_erp_actdel        ,msg_erp_actdel_hint        ,'',0,442,@TERPFormEdtrMenu_actTreeDel_OnExecute    ,nil,lkToolBarLeft,lkMIMain);
@@ -538,6 +510,10 @@
     CreateTMenuItem(lkMIMain, lkMIMain.Name+'003', '-', '', '',-1, 0);
     lkAct := TERPForm_CreateAction2(Result,obj_name_erp_objedtrmenu_actaccss_fill   ,msg_erp_actaccss_fill    ,msg_erp_actaccss_fill_hint   ,'',0,412,@TERPFormEdtrMenu_actAccsFill_OnExecute   ,nil,lkToolBarAccss, 96,lkMIMain);
     lkAct := TERPForm_CreateAction2(Result,obj_name_erp_objedtrmenu_actaccss_clear  ,msg_erp_actaccss_clear   ,msg_erp_actaccss_clear_hint  ,'',0,415,@TERPFormEdtrMenu_actAccsClear_OnExecute  ,nil,lkToolBarAccss, 96,lkMIMain);
+
+    lkTS := CreateTxcTabSheet(lkPC,obj_name_erp_objedtrmenu_tslocal,msg_erp_objeditormenu_menulocal,599,Amunhotep.MainForm.StyleManager.Colors.Foreground);
+    LocalizationIntf_Create(Result, lkTS, lkDS, 'TABL$_MENU' );
+
     with lkFBTreeView do
       begin
       BuildTree;  
@@ -547,5 +523,7 @@
         TERPFormEdtrMenu_FBTreeView_OnClick(lkFBTreeView);
         end;
       end;
+
+    TxcPageControlEx_ActivateDefaultPage(lkPC);
     Amunhotep.MainForm.xcMenu.AddMenu(lkMainMenu); lkMainMenu.OwnerDraw := true;
   end;

@@ -67,7 +67,7 @@
       end;  
     with TERPForm_DataSetMain(aOwner) do
       begin
-      SelectSQL.Text := lkSQL + #13#10 + 'ORDER BY ' + lkOrderBy;
+      SelectSQL.Text := lkSQL + 'ORDER BY ' + lkOrderBy;
       if TERPFormGrid_dtpDateFrom(aOwner).Parent.Visible then
         begin
         Prepare;
@@ -711,7 +711,6 @@
     if lkTr.InTransaction then
       lkTr.Commit;
     lkTr.Free;
-    
     lkAct := TERPForm_CreateAction(Result,obj_name_erp_actdocgotoday  ,msg_erp_actdocgotoday  ,msg_erp_actdocgotoday_hint,'',0,360,@TERPFormGridJrnl_actDocGotoDay_OnExecute,nil,lkToolBarItem,lkMIItem);
 
     lkToolBarItem.Width := TWinControl_AutoWidth(lkToolBarItem)+2; lkToolBarItem.Visible:= (lkToolBarItem.ControlCount > 0);  

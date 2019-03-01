@@ -11,6 +11,18 @@
   //============== PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_HEADER.INC ==============
   function TERPForm_Create(const aCaption, aFileNameIcon, aFileNameBitmap :string; const aModalForm:Boolean; aOnClose :TCloseEvent):TForm; forward;
   //============================================================================
+  function TERPForm_GetOwner(aCmp:TComponent):TComponent;
+  begin
+    Result := aCmp;
+    while(Result <> nil)do
+      begin
+      if(ObjectInheritsFrom(Result,'TCustomForm'))then exit;
+      Result := Result.Owner;
+      end;
+    if(not ObjectInheritsFrom(Result,'TCustomForm'))then 
+      Result := nil;
+  end;
+  //============================================================================
   function TERPForm_Settings(aOwner:TComponent):TStringList;
   begin
     with TxsStringsHolder(aOwner.FindComponent(obj_name_erp_data_settings)) do
@@ -18,6 +30,18 @@
       while(Items.Count < 1)do
         Items.Add;
       Result := TStringList(Items[0].Strings);
+      end;
+  end;
+  //============================================================================
+  function TERPForm_Local(aOwner:TComponent):TStringList;
+  begin
+    with TxsStringsHolder(aOwner.FindComponent(obj_name_erp_data_settings)) do
+      begin
+      while(Items.Count < 2)do
+        Items.Add;
+      Result := TStringList(Items[1].Strings);
+      Result.Duplicates := dupIgnore;
+      Result.Sorted     := True;
       end;
   end;
   //============================================================================
@@ -52,15 +76,21 @@
       TxcGradientPanelVista(aOwner.FindComponent(obj_name_erp_topbar)).Caption := #$20#$20#$20#$20#$20#$20+aCaption;
   end;
   //============================================================================
+  function TERPForm_ActionListMain(aOwner:TComponent):TActionList;
+  begin
+    Result := TActionList( TERPForm_GetOwner(aOwner).FindComponent(obj_name_erp_actlst) );
+  end;
+  //============================================================================
   function TERPForm_CreateAction(aOwner:TComponent; const aActionName, aCaption, aHint, aShortCut :string; const aGroupIndex, aImageIndex :Integer;
              aOnExecute, aOnUpdate :TNotifyEvent; aToolBar :TxcGradientPanel; aParentItem :TMenuItem):TCustomAction;
   var
     lkTBB:TxcToolBarButton;
     lkMI :TMenuItem;
   begin
-    Result := CreateTAction(aOwner,aActionName,aCaption,aHint,aShortCut, aGroupIndex, aImageIndex);
-    Result.OnExecute := aOnExecute; 
-    Result.OnUpdate  := aOnUpdate;
+    Result            := CreateTAction(aOwner,aActionName,aCaption,aHint,aShortCut, aGroupIndex, aImageIndex);
+    Result.OnExecute  := aOnExecute; 
+    Result.OnUpdate   := aOnUpdate;
+    Result.ActionList := TERPForm_ActionListMain(aOwner);
     if(aToolBar <> nil)then
       begin
       lkTBB := CreateTxcToolBarButton(aToolBar, aToolBar, 'tbb'+Result.Name, '','', aToolBar.ControlCount * TERPForm_DefaultToolButtonWidth,1,TERPForm_DefaultToolButtonWidth,TERPForm_DefaultToolButtonWidth, alLeft, -1, Result);
@@ -184,18 +214,6 @@
             end;
   end;
   //============================================================================
-  function TERPForm_GetOwner(aCmp:TComponent):TComponent;
-  begin
-    Result := aCmp;
-    while(Result <> nil)do
-      begin
-      if(ObjectInheritsFrom(Result,'TCustomForm'))then exit;
-      Result := Result.Owner;
-      end;
-    if(not ObjectInheritsFrom(Result,'TCustomForm'))then 
-      Result := nil;
-  end;
-  //============================================================================
   procedure TERPForm_GridSettingsLoad(aDBGrid :TDBGridEh; const aFileName:string);
   var
     lkFileName:string;
@@ -205,6 +223,7 @@
   begin
     lkFileName := PrepareAbsoleteFileName(aFileName);
     if not FileExists(lkFileName)then exit;
+
     with TStringList.Create do
       begin
       LoadFromFile(lkFileName);
@@ -284,7 +303,7 @@
           Values[UpperCase(lkName+'.Columns['+aDBGrid.Columns[i].FieldName+'].Width')]                  := IntToStr(aDBGrid.Columns[i].Width);
           Values[UpperCase(lkName+'.Columns['+aDBGrid.Columns[i].FieldName+'].STFilter.ExpressionStr')] := aDBGrid.Columns[i].STFilter.ExpressionStr;
           Values[UpperCase(lkName+'.Columns['+aDBGrid.Columns[i].FieldName+'].Title.SortMarker')]       := IntToStr(Integer(aDBGrid.Columns[i].Title.SortMarker));
-  //        Values[UpperCase(lkName+'.Columns['+aDBGrid.Columns[i].FieldName+'].ColIndex')]               := IntToStr(aDBGrid.Columns[i].ColIndex);
+          Values[UpperCase(lkName+'.Columns['+aDBGrid.Columns[i].FieldName+'].Index')]                  := IntToStr(aDBGrid.Columns[i].Index);
           end;
       SaveToFile(lkFileName);  
       Free;

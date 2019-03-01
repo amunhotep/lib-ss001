@@ -235,8 +235,10 @@
       begin
       SetGlobalVariable(ERP_GLOBALVARIABLE_USER_CURRENT , StrTrimAll(UpperCase(lkUserName)));
       ExecSQL(FBDataBase, 'EXECUTE BLOCK AS BEGIN RDB$SET_CONTEXT(''USER_SESSION'', '''+ERP_GLOBALVARIABLE_USER_CURRENT+''', '''+StrTrimAll(UpperCase(lkUserName))+'''); END ');
+
       SetGlobalVariable(ERP_GLOBALVARIABLE_USER_LOCAL   , lkLangId );
       ExecSQL(FBDataBase, 'EXECUTE BLOCK AS BEGIN RDB$SET_CONTEXT(''USER_SESSION'', '''+ERP_GLOBALVARIABLE_USER_LOCAL  +''', '''+lkLangId+'''); END ');
+
       if lkFilial then
         begin
         SetGlobalVariable(ERP_GLOBALVARIABLE_USER_FILIAL, lkFilialId );

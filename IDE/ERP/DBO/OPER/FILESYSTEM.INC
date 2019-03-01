@@ -798,8 +798,8 @@ const //==================== PEAKTOP:IDE/ERP/DBO/OPER/FILESYSTEM.INC ===========
       end;
     lkMI  := CreateTMenuItem(lkMIFile,obj_name_erp_mimainfilenew,msg_erp_mimainfilenew,'','',-1,0);
     lkMI.SubMenuImages := TImageList(Result.FindComponent(obj_name_erp_imagelistfs_small));
-    lkAct := TERPForm_CreateAction(Result,obj_name_erp_actfilenewfolder,msg_erp_actfilenewfolder,msg_erp_actfilenewfolder_hint,'F7'                 ,0,  0,@TERPFormOperFileSystem_actFileNewFolder_OnExecute,nil,lkToolBarFile,lkMI);
-    lkAct := TERPForm_CreateAction(Result,obj_name_erp_actfilenewfile  ,msg_erp_actfilenewfile  ,msg_erp_actfilenewfile_hint  ,'Ctrl+N'             ,0,  1,@TERPFormOperFileSystem_actFileNewFile_OnExecute  ,nil,lkToolBarFile,lkMI);
+    lkAct := TERPForm_CreateAction(Result,obj_name_erp_actfilenewfolder,msg_erp_actfilenewfolder,msg_erp_actfilenewfolder_hint,'F7'                 ,0, 80,@TERPFormOperFileSystem_actFileNewFolder_OnExecute,nil,lkToolBarFile,lkMI);
+    lkAct := TERPForm_CreateAction(Result,obj_name_erp_actfilenewfile  ,msg_erp_actfilenewfile  ,msg_erp_actfilenewfile_hint  ,'Ctrl+N'             ,0,181,@TERPFormOperFileSystem_actFileNewFile_OnExecute  ,nil,lkToolBarFile,lkMI);
     lkMI_Line := CreateTMenuItemLine(lkMI    ,obj_name_erp_mimainfilenew+'0001');
     for lkFT:=ftText to ftInno do
       begin

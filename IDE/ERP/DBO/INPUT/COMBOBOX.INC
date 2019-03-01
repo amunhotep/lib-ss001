@@ -19,8 +19,8 @@
   var
     lkCBX :TComboBox;
   begin
-    Result := CreateTxcGroupBox(aOwner, aParent, aName, aCaption,alNone,aLeft,aTop,aHeight,aWidth);
-    lkCBX  := CreateTComboBox(aOwner,Result, '', 4,20,20,aWidth-8, aItems, aItemIndex);
+    Result := CreateTxcGroupBox(aOwner, aParent, aName, aCaption, alNone, aLeft, aTop, aHeight, aWidth);
+    lkCBX  := CreateTComboBox(aOwner, Result, '', 4, 20, 20, aWidth-8, aItems, aItemIndex);
     with lkCBX do
       begin
       Name       := aNameComboBox;

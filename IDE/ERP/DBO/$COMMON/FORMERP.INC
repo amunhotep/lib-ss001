@@ -27,6 +27,7 @@
   //============================================================================
   function TERPForm_Create(const aCaption, aFileNameIcon, aFileNameBitmap :string; const aModalForm:Boolean; aOnClose :TCloseEvent):TForm;
   var
+    lkActnLst    :TActionList;
     lkAct        :TCustomAction;
     lkMainMenu   :TMainMenu;
     lkTopBar     :TxcGradientPanelVista;
@@ -82,6 +83,12 @@
       Values[ERP_SETTINGS_TABLECAPTION] := '';
       Values[ERP_SETTINGS_TYPESLIST   ] := '';
       Values[ERP_SETTINGS_BASETYPE    ] := '0';
+      end;
+    lkActnLst  := TActionList.Create(Result);
+    with lkActnLst do
+      begin
+      Name      := obj_name_erp_actlst;
+      Images    := Amunhotep.MainForm.ImageListMain;
       end;
     lkMainMenu := TMainMenu.Create(Result);
     with lkMainMenu do

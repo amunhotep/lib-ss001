@@ -28,7 +28,7 @@
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERPEDTR_ACTIONS.INC}{$I ./FORMERPEDTR_ACTIONS.INC}                {$ENDIF}
   //================= PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERPEDTR.INC ==============
 const
-  TERPFormEdtr_DefaultLabelWidth  = 160;
+  TERPFormEdtr_DefaultLabelWidth  = 128;
   TERPFormEdtr_DefaultDBEditWidth = 400;
   //============================================================================
   procedure TERPFormEdtr_dtsMain_AfterOpen(DataSet :TDataSet);

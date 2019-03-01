@@ -220,11 +220,11 @@
       OnGetCellParams := @ERP_DBGridEh_OnGetCellParams_JrnlComments;
       OnDblClick      := @DocComentsIntf_actUpd_OnExecute;
       end;
-    lkCol := CreateTColumnEh(lkDBG,'ID'         ,'# ### ### ##0'      ,'Коментарии|Код'        , 60,taRightJustify); lkCol.Title.SortMarker := smDownEh;
-    lkCol := CreateTColumnEh(lkDBG,'NAME'       ,''                   ,'Коментарии|Текст'      ,520,taLeftJustify );
-    lkCol := CreateTColumnEh(lkDBG,'DATE_CREATE','dd.mm.yyyy hh:nn:ss','Коментарии|Дата'       ,120,taLeftJustify );
-    lkCol := CreateTColumnEh(lkDBG,'USER_ID'    ,''                   ,'Пользователь|Имя'      ,126,taLeftJustify );
-    lkCol := CreateTColumnEh(lkDBG,'WRK_NAME'   ,''                   ,'Пользователь|Сотрудник',140,taLeftJustify );
+    lkCol := CreateTColumnEh(lkDBG,'ID'         ,'# ### ### ##0'      ,'Коментарии к документу|Код'        , 60,taRightJustify); lkCol.Title.SortMarker := smDownEh;
+    lkCol := CreateTColumnEh(lkDBG,'NAME'       ,''                   ,'Коментарии к документу|Текст'      ,520,taLeftJustify );
+    lkCol := CreateTColumnEh(lkDBG,'DATE_CREATE','dd.mm.yyyy hh:nn:ss','Коментарии к документу|Дата'       ,120,taLeftJustify );
+    lkCol := CreateTColumnEh(lkDBG,'USER_ID'    ,''                   ,'Коментарии к документу|Пользователь|Имя'      ,126,taLeftJustify );
+    lkCol := CreateTColumnEh(lkDBG,'WRK_NAME'   ,''                   ,'Коментарии к документу|Пользователь|Сотрудник',140,taLeftJustify );
     lkAct := CreateTAction(aOwner,obj_name_erp_actcomentins,msg_erp_actcomentins,msg_erp_actcomentins_hint,'',0,176); lkAct.OnExecute := @DocComentsIntf_actIns_OnExecute;   
     lkTBB := CreateTxcToolBarButton2(lkTopBar,lkTopBar,'tbb'+lkAct.Name,lkLBL.Left+lkLBL.Width,1,lkTopBar.Height-2,80,alLeft,lkAct);
     with lkTBB do

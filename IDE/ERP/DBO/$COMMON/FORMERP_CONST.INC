@@ -5,6 +5,6 @@ const //========== PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_CONST.INC ===============
   TERPForm_DefaultEditButtonWidth    = 96;
   TERPForm_DefaultToolSeparatorWidth =  8;               
   TERPForm_DefaultControlIndent      =  4;
-  TERPForm_DefaultControlHeight      = 20;
+  TERPForm_DefaultControlHeight      = 22;
   TERPForm_DefaultControlEditHeight  = 16; 
-  TERPForm_DefaultControlWidthMul    = 1.600000;    
+  TERPForm_DefaultControlWidthMul    = 1.800000;    

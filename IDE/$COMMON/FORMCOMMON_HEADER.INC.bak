@@ -17,16 +17,6 @@
       TxcGradientPanelVista(aOwner.FindComponent(obj_name_common_topbar)).Caption := #$20#$20#$20#$20#$20#$20+aCaption;
   end;
   //============================================================================
-  procedure TCommonForm_SetTopBarColor(aOwner:TComponent; const aColor:TColor);
-  begin
-    with TxcGradientPanelVista( aOwner.FindComponent(obj_name_common_topbar) ) do
-      begin
-      StyleManager          := nil;
-      Colors.HotTrack       := aColor or $A0A0A0;
-      Colors.HotTrackBorder := aColor;
-      end;  
-  end;
-  //============================================================================
   function TCommonForm_CreateAction(aOwner:TComponent; const aActionName, aCaption, aHint, aShortCut :string; const aGroupIndex, aImageIndex :Integer;
              aOnExecute, aOnUpdate :TNotifyEvent; aToolBar :TxcGradientPanel; aParentItem :TMenuItem):TCustomAction;
   var

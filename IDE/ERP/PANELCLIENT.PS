@@ -1,0 +1,12 @@
+{$DEFINE PEAKTOP:IDE/ERP/PANELCLIENT.PS}
+{$IFNDEF PEAKTOP:IDE/ERP/PANELCLIENT.INC} {$I ./PANELCLIENT.INC} {$ENDIF}
+begin
+  if(Amunhotep.MainForm.FindComponent(obj_name_erp_amunhotepmainform_panelclient) <> nil)then
+    try Amunhotep.MainForm.FindComponent(obj_name_erp_amunhotepmainform_panelclient).Free; except end
+   else
+    if not FBDataBase.Connected then
+      begin
+      DontAutoFree;
+      Amunhotep_MainForm_PanelClient_Create;
+      end; 
+end.

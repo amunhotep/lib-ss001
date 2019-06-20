@@ -107,7 +107,7 @@ const
     lkLastTop := lkLastTop + 4;
     with InputIntf_CheckBox_Create(aOwner,aParent,objname_checkfilials,msg_input_checkfilials,4,lkLastTop, 20,360) do
       begin
-      Checked   := true;
+      Checked   := false;
       lkLastTop := lkLastTop + Height;
       end;
   end;

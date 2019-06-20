@@ -164,6 +164,7 @@ const
       '      Text := lkStr; '+SQLCRLF+
       '    end; '+SQLCRLF+ 
       '  InputIntf_CheckBox_SetCheckedStr(lkFrm, objname_showjrnl, ''0''); '+SQLCRLF+  
+      '  TxcCheckBox(lkFrm.FindComponent(objname_checkfilials)).Checked := False; '+SQLCRLF+
       '  TERPFormRpti_RefreshView(lkFrm); '+SQLCRLF+
       'end.';    
     run(lkScript, 'PEAKTOP:IDE/ERP/CONFIG/RPTI/EC59A1C9-A2C8-4251-AF50-6FAA05ACA43A/DEFAULT.PS');
@@ -196,6 +197,7 @@ const
       '    if GetField(FBDataBase, ''TABL$R_BUHG_ACCS'', ''NAME'', ''ID = ''+IntToStr(Tag), lkStr)then '+SQLCRLF+
       '      Text := lkStr; '+SQLCRLF+
       '    end; '+SQLCRLF+ 
+      '  TxcCheckBox(lkFrm.FindComponent(objname_checkfilials)).Checked := False; '+SQLCRLF+
       '  TERPFormRpti_RefreshView(lkFrm); '+SQLCRLF+
       'end.';    
     run(lkScript, 'PEAKTOP:IDE/ERP/CONFIG/RPTI/99A279B4-8174-4FF9-BE81-07D1EB47A5EC/DEFAULT.PS');

@@ -1,6 +1,7 @@
 {$DEFINE PEAKTOP:IDE/ERP/DBO/RPTI/WIZARD.INC}
 {$IFNDEF PEAKTOP:OBJ/TLABEL.INC}                       {$I PEAKTOP:OBJ/TLABEL.INC}       {$ENDIF}
 {$IFNDEF PEAKTOP:OBJ/TXCEDITCOMBO.INC}                 {$I PEAKTOP:OBJ/TXCEDITCOMBO.INC} {$ENDIF}
+{$IFNDEF PEAKTOP:OBJ/TXCCHECKBOX.INC}                  {$I PEAKTOP:OBJ/TXCCHECKBOX.INC}  {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/FILENAMES_TEMPLATES.INC}  {$I ../FILENAMES_TEMPLATES.INC}   {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP.INC}      {$I ../$COMMON/FORMERP.INC}       {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/$COMMON/FORMERP_LANG.INC} {$I ../$COMMON/FORMERP_LANG.INC}  {$ENDIF}
@@ -29,13 +30,14 @@
       end;
   end;
   //============================================================================
-  function ERP_WizardRPTI_Execute(var aGUID, aCaption, aParentTypeId:string):Boolean;
+  function ERP_WizardRPTI_Execute(var aGUID, aCaption, aParentTypeId:string; var aInDataBase:Boolean):Boolean;
   var
     lkForm       :TForm;
     lkLbl        :TLabel;
     lkEdtParent  :TxcEditCombo;
     lkEdtGUID    :TxcEditCombo;
     lkEdtCaption :TxcEditCombo;
+    lkCbInDB     :TxcCheckBox;
     lkStr        :string;
   begin
     lkForm := TERPForm_Create(msg_erp_mimainfilenew+' '+ERP_ObjectCaption(5),  ERP_ObjectIcon(5), ERP_ObjectBitmap(5), true, nil);
@@ -43,7 +45,7 @@
       begin
       Position    := poDesktopCenter;
       BorderStyle := bsDialog;
-      Height      := 220;
+      Height      := 280;
       Width       := 600;
       end;
     with TxcGradientPanelVista(lkForm.FindComponent(obj_name_erp_topbar)) do
@@ -58,6 +60,7 @@
     lkEdtGUID    := CreateTxcEditCombo(lkForm,lkForm,'edtGUID'             ,TERPForm_DefaultControlIndent,lkLbl.Top+lkLbl.Height+TERPForm_DefaultControlIndent            ,20,lkForm.ClientWidth-(TERPForm_DefaultControlIndent*2));
     lkLbl        := CreateTLabel      (lkForm,lkForm,'Название отчета'     ,TERPForm_DefaultControlIndent,lkEdtGUID.Top+lkEdtGUID.Height+TERPForm_DefaultControlIndent    ,20,lkForm.ClientWidth-(TERPForm_DefaultControlIndent*2), alNone, taLeftJustify);
     lkEdtCaption := CreateTxcEditCombo(lkForm,lkForm,'edtCaption'          ,TERPForm_DefaultControlIndent,lkLbl.Top+lkLbl.Height+TERPForm_DefaultControlIndent            ,20,lkForm.ClientWidth-(TERPForm_DefaultControlIndent*2));
+    lkCbInDB     := CreateTxcCheckBox (lkForm,lkForm,'cbInDataBase', 'Создать в базе данных', '',alNone,TERPForm_DefaultControlIndent,lkEdtCaption.Top+lkEdtCaption.Height+TERPForm_DefaultControlIndent,20,lkForm.ClientWidth-(TERPForm_DefaultControlIndent*2), aInDataBase);   
     with lkEdtGUID do
       begin
       Color         := Amunhotep.MainForm.StyleManager.Colors.Foreground;
@@ -81,57 +84,68 @@
       Text          := lkStr;
       OnButtonClick := @ERP_WizardRPTI_edtParent_OnButtonClick;
       end;
+      
     Result := (lkForm.ShowModal = mrOk);
     if Result then
       begin
       aGUID         := lkEdtGUID.Text;
       aCaption      := lkEdtCaption.Text;
       aParentTypeId := IntToStr(lkEdtParent.Tag);
+      aInDataBase   := lkCbInDB.Checked;
       end;
     lkForm.Free;
   end;
   //============================================================================
-  function ERP_ObjCreate(const aGUID, aCaption, aParentTypeId:string; var aFileNameScript:string):Boolean;
+  function ERP_ObjCreate(const aGUID, aCaption, aParentTypeId:string; const aInDataBase:Boolean; var aFileNameScript:string):Boolean;
   var
     lkGUIDClear   :string;
     lkFileNameSQL :string;
     lkFileNameRes :string;
+    lkFileNameName:string;
+    lkFileNameFS  :string;
     lkSQL         :string;
     lkScript      :string;
   begin
     Result := false;
     lkGUIDClear := Copy(aGUID, 2, Length(aGUID)-2);
-    if not DirectoryExists(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/')) then
+    if aInDataBase then
       begin
-      CreateDir(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/'));
-      end;
-    aFileNameScript:= 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.PS';
-    lkFileNameSQL  := 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.SQL';
-    lkFileNameRes  := 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/RPT_DEFAULT.XFM';
+      aFileNameScript:= 'DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.PS';
+      lkFileNameSQL  := 'DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.SQL';
+      lkFileNameRes  := 'DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/RPT_DEFAULT.XFM';
+      end
+     else
+      begin
+      if not DirectoryExists(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/')) then
+        begin
+        CreateDir(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/'));
+        end;
+      aFileNameScript:= 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.PS';
+      lkFileNameSQL  := 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.SQL';
+      lkFileNameRes  := 'PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/RPT_DEFAULT.XFM';
+      end; 
     lkScript := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_TEMPLATE_RPTI));
     lkScript := 
-      '{$DEFINE '+aFileNameScript+'}'+#13#10+
+      '{$DEFINE '+aFileNameScript+'}'+SQLCRLF+
       lkScript+
-      'begin'+#13#10+
-      '  TERPFormRpti_Create('''+aGUID+''');'+#13#10+
+      'begin'+SQLCRLF+
+      '  TERPFormRpti_Create('''+aGUID+''');'+SQLCRLF+
       'end.';
     StringsSaveToFile(aFileNameScript, lkScript);
-    //StringsSaveToFile('DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.PS', lkScript);
-    lkScript := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_TEMPLATE_RPTI_RES));
-    StringsSaveToFile(lkFileNameRes, lkScript);
-    //StringsSaveToFile('DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/RPT_DEFAULT.XFM', lkScript);
-    lkScript := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_TEMPLATE_RPTI_SQL));
-    StringsSaveToFile(lkFileNameSQL, lkScript);
-    //StringsSaveToFile('DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DEFAULT.SQL', lkScript);
-    StringsSaveToFile(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/NAME.TXT'), aCaption);
-    //StringsSaveToFile('DB:CONFIG/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/NAME.TXT', aCaption);
-    StringsSaveToFile(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DESKTOP.INI'), 
-      '[.ShellClassInfo]'+#13#10+
-      'InfoTip='+aCaption
-    );
-    FileSetAttr(ExtractFilePath(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DESKTOP.INI')), {faSysFile} 4 + {faDirectory} 16);
-    lkSQL := 'UPDATE OR INSERT INTO TABL$_TB(TYPE_ID, ID, NAME, NAME2, SC_ITEM, SC_REF)VALUES('''+aParentTypeId+''','''+aGUID+''','''+StrReplaceStr(aCaption, '''', '''''')+
-      ''', '''+StrReplaceStr(aCaption, '''', '''''')+''', '''+aFileNameScript+''', '''+lkFileNameSQL+''')MATCHING(ID)';
+    lkScript := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_TEMPLATE_RPTI_RES)); StringsSaveToFile(lkFileNameRes, lkScript);
+    lkScript := StringsLoadFromFile(PrepareAbsoleteFileName(ERP_FILENAME_TEMPLATE_RPTI_SQL)); StringsSaveToFile(lkFileNameSQL, lkScript);
+    if not aInDataBase then
+      begin
+      StringsSaveToFile(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/NAME.TXT'), aCaption);
+      StringsSaveToFile(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DESKTOP.INI'), 
+        '[.ShellClassInfo]'+#13#10+
+        'InfoTip='+aCaption
+      );
+      FileSetAttr(ExtractFilePath(PrepareAbsoleteFileName('PEAKTOP:IDE/ERP/CONFIG2/'+ERP_ObjectDir(ERP_OBJECTTYPE_RPT)+lkGUIDClear+'/DESKTOP.INI')), {faSysFile} 4 + {faDirectory} 16);
+      end;
+    lkSQL := 'UPDATE OR INSERT INTO TABL$_TB(TYPE_ID, ID, NAME, NAME2, SC_ITEM, SC_REF)VALUES('''+
+       aParentTypeId+''','''+aGUID+''','''+StrReplaceStr(aCaption, '''', '''''')+''', '''+
+       StrReplaceStr(aCaption, '''', '''''')+''', '''+aFileNameScript+''', '''+lkFileNameSQL+''')MATCHING(ID)';
     ExecSQL(FBDataBase, lkSQL);
     lkSQL := 
       'EXECUTE BLOCK AS '+#13#10+

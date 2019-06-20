@@ -2,7 +2,7 @@
 const //============ PEAKTOP:IDE/FIREBIRD/DIALOGS/$SETTINGS.INC ================
   DefaultFirebirdDialogImageLogoLeft    = 'PEAKTOP:IMG/FIREBIRD/LOGO_002.BMP';
   DefaultFirebirdDialogImageLogoTop     = 'PEAKTOP:IMG/FIREBIRD/LOGO_004.BMP';
-  DefaultFirebirdDialogImageLogoError   = 'PEAKTOP:IMG/FIREBIRD/LOGO_003.BMP';
+  DefaultFirebirdDialogImageLogoError   = 'PEAKTOP:IMG/FIREBIRD/LOGO_007.BMP';
   DefaultFirebirdDialogHeight           = 354;
   DefaultFirebirdDialogWidth            = 580;
   DefaultFirebirdDialogDBSettingsHeight = 354;

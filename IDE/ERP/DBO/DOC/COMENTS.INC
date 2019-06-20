@@ -17,6 +17,11 @@
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/DBGRID/GETCELLPARAMS_JRNL.INC}  {$I ../DBGRID/GETCELLPARAMS_JRNL.INC}        {$ENDIF}
 {$IFNDEF PEAKTOP:IDE/ERP/DBO/DOC/COMENTS_GLOBALVARIABLES.INC}{$I ./COMENTS_GLOBALVARIABLES.INC}           {$ENDIF}
   //================== PEAKTOP:IDE/ERP/DBO/DOC/COMENTS.INC =====================
+  procedure DocComentsIntf_Form_OnShow(Sender :TObject);
+  begin
+    TForm(Sender).BringToFront;
+  end;
+  //============================================================================
   function DocComentsIntf_InputQueryStr(const ACaption, aPrompt:string; var aValue:string):Boolean;
   var
     lkForm :TForm;
@@ -25,8 +30,9 @@
     lkForm := TERPForm_Create(aCaption, '', 'PEAKTOP:IMG/CONFIG/ERP/LOG0032X0032.BMP', true, nil);
     with lkForm do
       begin
-      Width := 480;
-      Height:= 320;
+      Width  := 480;
+      Height := 320;
+      OnShow := @DocComentsIntf_Form_OnShow;
       end;
     TxcGradientPanelVista(lkForm.FindComponent(obj_name_erp_topbar)).Caption := #$20#$20#$20#$20#$20#$20+aPrompt;
     lkMemo := CreateTMemo(lkForm, lkForm, 'Memo', 0, 80, 200, 200, alClient);

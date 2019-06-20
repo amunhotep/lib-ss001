@@ -28,7 +28,7 @@
       AlphaBlend      := true;
       Position        := poDesktopCenter;
       Height          := 320;
-      Width           := 480;
+      Width           := 800;
       BorderStyle := bsDialog;
       end;
     with TERPForm_Settings(lkFrm) do
@@ -73,8 +73,8 @@
       SelectedButtonColor         := Amunhotep.MainForm.StyleManager.Colors.HotTrackBorder;
       ShowHint                    := true;
       Images                      := lkIL32;
-      ButtonHeight                := Images.Height + 4;
-      ButtonWidth                 := lkFrm.Width - 24;
+      ButtonHeight                := Images.Height + 2;
+      ButtonWidth                 := Images.Height * 6 + 4;
       OnButtonClicked             := @ERPDialogCaseReferenceItem02_CategoryButtons_OnButtonClicked;
       SelectedItem                := nil;
       end;
@@ -127,7 +127,8 @@
     if(lkCBTNS.SelectedItem = nil)then
       if(lkCategory.Items.Count > 0)then
         lkCBTNS.SelectedItem := lkCategory.Items[0]; 
-    lkFrm.Height := 96 + (lkCBTNS.ButtonHeight * lkCategory.Items.Count);    
+    lkFrm.Height := Screen.Height - 96;    
+    lkFrm.Width  := Screen.Width  - 32;    
   loop:          
     lkCategory.Collapsed := false;
     Result := (lkFrm.ShowModal = mrOk);
@@ -149,6 +150,19 @@
     GetField(FBDataBase, 'TABL$_TB', 'NAME', 'TRIM(ID) = '''+aObjId+'''', lkCaption);
     Result := ERPDialogCaseItem02_Execute(
       'SELECT R.ID, R.NAME FROM '+aObjId+' R WHERE (R.FLAG_DELETE <> 1) OR (R.FLAG_DELETE IS NULL) ORDER BY R.ID ', 
+      ERP_ObjectCaption(ERP_OBJECTTYPE_REF) +': '+lkCaption, 
+      aLabelCaption, ERP_ObjectIcon(ERP_OBJECTTYPE_REF), ERP_ObjectBitmap(ERP_OBJECTTYPE_REF), aReferenceID);
+  end;
+  //============================================================================
+  function ERPDialogCaseReferenceItem03_Execute(const aObjId, aWhereClause, aLabelCaption:string; var aReferenceID:string):Boolean;
+  var
+    lkCaption :string;
+  begin
+    Result := false;
+    lkCaption := '';
+    GetField(FBDataBase, 'TABL$_TB', 'NAME', 'TRIM(ID) = '''+aObjId+'''', lkCaption);
+    Result := ERPDialogCaseItem02_Execute(
+      'SELECT R.ID, R.NAME FROM '+aObjId+' R WHERE ((R.FLAG_DELETE <> 1) OR (R.FLAG_DELETE IS NULL)) AND ('+aWhereClause+') ORDER BY R.NAME ', 
       ERP_ObjectCaption(ERP_OBJECTTYPE_REF) +': '+lkCaption, 
       aLabelCaption, ERP_ObjectIcon(ERP_OBJECTTYPE_REF), ERP_ObjectBitmap(ERP_OBJECTTYPE_REF), aReferenceID);
   end;

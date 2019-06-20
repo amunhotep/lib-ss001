@@ -290,15 +290,15 @@ var
   procedure AddItemToDoc(const aItemNumber:string);
   var
     lkItemNumber :string;
-    lkSQL, lkS, lkS2 :string;
+    lkSQL, lkS, lkS2, lkPrice :string;
     lkJ_ID :string;
     lkFirmId :Integer;
   begin
     lkFirmId := dtsJournal.FieldByName('FIRM_ID').AsInteger;
     lkItemNumber := StrCiphersOnlyInt(aItemNumber);
     // kill checksum
-    if(Length(lkItemNumber) > 0)then
-      Delete(lkItemNumber, Length(lkItemNumber), 1);
+    //if(Length(lkItemNumber) > 0)then
+    //  Delete(lkItemNumber, Length(lkItemNumber), 1);
     // kill leading zeros
     if(Length(lkItemNumber) > 0)then
       while((Length(lkItemNumber) > 0) and (lkItemNumber[1] = '0'))do
@@ -331,17 +331,14 @@ var
         WriteLn('331:'+lkS);
         lkItemNumber := lkS;
         end;
-      GetField(FBDataBase, 'TABL$P_TMC_QUANT', 'CAST(COALESCE(SUM(QUANT),0) AS INTEGER)', '(TMC_ID = '''+lkItemNumber+''')AND((PLACE_ID+0) = '''+
-        dtsJournal.FieldByName('PLACE_ID').AsString+''')AND((FIRM_ID+0) = '''+
-        dtsJournal.FieldByName('FIRM_ID').AsString+''')', lkS2);
-      if(lkS2 = '0')then
-        begin
-        GetField(FBDataBase, 'TABL$P_TMC_QUANT', 'CAST(COALESCE(SUM(QUANT),0) AS INTEGER)', '(TMC_ID = '''+lkItemNumber+''')AND((PLACE_ID+0) = '''+
-          dtsJournal.FieldByName('PLACE_ID').AsString+''')AND((FIRM_ID+0) <> '''+dtsJournal.FieldByName('FIRM_ID').AsString+''')', lkS);
-        if(Dialogs.MessageDlg('ТМЦ с кодом "'+lkItemNumber+'" проходит по другой фирме учета.'+#13#10+'Добавить его в акт сверки ?', mtConfirmation, [mbYes, mbNo]) <> mrYes)then
-          exit;
-        end;
-      lkSQL := 'INSERT INTO TABL$D_1000014(J_ID, TMC_ID, QUANT)VALUES('''+DocId+''', '''+lkItemNumber+''', '''+lkS2+''')';
+      GetField(FBDataBase, 'PROC$P_TMC_QUANT_ON_DATE('+dtsJournal.FieldByName('FIRM_ID').AsString+', '+lkItemNumber+', '+
+        dtsJournal.FieldByName('PLACE_ID').AsString+', '''+
+        FormatDateTime('dd.mm.yyyy', dtsJournal.FieldByName('DATE_COMMIT').AsDateTime)+' 00:00:00'')', 'QUANT', '', lkS2);
+      lkPrice := '0';  
+      GetField(FBDataBase, 'PROC$R_TMC_LIST_SEBESTLAST('+lkItemNumber+')', 'PRICE', '', lkPrice);
+      if(StrTrimAll(lkPrice) = '')then
+        lkPrice := '0';
+      lkSQL := 'INSERT INTO TABL$D_1000014(J_ID, TMC_ID, QUANT, PRICE)VALUES('''+DocId+''', '''+lkItemNumber+''', '''+lkS2+''', '''+lkPrice+''')';
       CloseDataSets;
       ExecSQL(dtsJournal.DataBase, lkSQL);
       RefreshView;

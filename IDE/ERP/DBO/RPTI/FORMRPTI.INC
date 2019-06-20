@@ -230,7 +230,7 @@
     lkLBL := nil;
     if(lkRpt.FindComponent('lblCaption') <> nil)then lkLBL := TxrLabel(lkRpt.FindComponent('lblCaption'));
     if(lkLBL <> nil)then
-      lkLBL.Caption := TERPForm_Settings(aOwner).Values[ERP_SETTINGS_TABLECAPTION]+' ['+msg_erp_report_done+' '+FormatDateTime('dd.mm.yyyy hh:nn:ss', Now)+']'+#13#10#$20#$20#$20#$20+
+      lkLBL.Caption := TERPForm_Settings(aOwner).Values[ERP_SETTINGS_TABLECAPTION]+//' ['+msg_erp_report_done+' '+FormatDateTime('dd.mm.yyyy hh:nn:ss', Now)+']'+#13#10#$20#$20#$20#$20+
         lkRptName+#13#10#$20#$20#$20#$20+TERPFormRpti_GetExportFilter(aOwner);
     TERPFormRpti_BeforePreview(aOwner, lkRpt);  
     lkRpt.Prepare;

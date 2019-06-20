@@ -6,11 +6,12 @@ var
   lkCaption     :string;
   lkScriptName  :string;
   lkParentTypeId:string;
+  lkInDataBase  :Boolean;
 begin
   lkParentTypeId := '5';
   CoCreateGUID(lkGUID_);
   lkGUID := GUIDToStr(lkGUID_);
-  if ERP_WizardRPTI_Execute(lkGUID, lkCaption, lkParentTypeId)then
-    if ERP_ObjCreate(lkGUID, lkCaption, lkParentTypeId, lkScriptName) then
+  if ERP_WizardRPTI_Execute(lkGUID, lkCaption, lkParentTypeId, lkInDataBase)then
+    if ERP_ObjCreate(lkGUID, lkCaption, lkParentTypeId, lkInDataBase, lkScriptName) then
       Amunhotep.MainForm.ProcessFile(lkScriptName);  
 end.
